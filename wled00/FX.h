@@ -436,10 +436,10 @@ typedef struct Segment {
     static size_t _usedSegmentData;    // WLEDMM uint16_t is too small
     void setPixelColorXY_fast(int x, int y,uint32_t c, uint32_t scaled_col, int cols, int rows); // set relative pixel within segment with color - faster, but no error checking!!!
 
+    bool _isSimpleSegment = false;      // simple = no grouping or spacing - mirror, transpose or reverse allowed
+    bool _isSuperSimpleSegment = false; // superSimple = no grouping or spacing, no mirror - only transpose or reverse allowed
 #ifdef WLEDMM_FASTPATH
     // WLEDMM cache some values that won't change while drawing a frame
-    bool _isSimpleSegment = false;
-    bool _isSuperSimpleSegment = false;
     bool _isValid2D = false;
     uint8_t _brightness = 255; // final pixel brightness - including transitions and segment opacity
     bool _firstFill = true;  // dirty HACK support
@@ -594,7 +594,7 @@ typedef struct Segment {
     void    setCCT(uint16_t k);
     void    setOpacity(uint8_t o);
     void    setOption(uint8_t n, bool val);
-    void    setMode(uint8_t fx, bool loadDefaults = false);
+    void    setMode(uint8_t fx, bool loadDefaults = false, bool sliderDefaultsOnly = false);
     void    setPalette(uint8_t pal);
     uint8_t differs(Segment& b) const;
     void    refreshLightCapabilities(void);
